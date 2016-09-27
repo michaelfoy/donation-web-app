@@ -1,0 +1,14 @@
+{
+  "name": "donation-web",
+  "version": "1.0.0",
+  "description": "An application to provide donation facilities for a candidate",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "michaelfoy",
+  "license": "ISC",
+  "dependencies": {
+    "hapi": "^15.1.0"
+  }
+}
