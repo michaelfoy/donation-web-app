@@ -9,6 +9,7 @@
   "author": "michaelfoy",
   "license": "ISC",
   "dependencies": {
-    "hapi": "^15.1.0"
+    "hapi": "^15.1.0",
+    "inert": "^4.0.2"
   }
 }
