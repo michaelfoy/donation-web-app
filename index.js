@@ -3,6 +3,7 @@
 const Hapi = require('hapi');
 var server = new Hapi.Server();
 server.bind({
+  currentUser: {},
   donations: [],
   users: [],
 });

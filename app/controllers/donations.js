@@ -23,6 +23,7 @@ exports.donate = {
 
   handler: function (request, reply) {
     const data = request.payload;
+    data.donor = this.currentUser.firstName + ' ' + this.currentUser.lastName;
     this.donations.push(data);
     reply.redirect('/report');
   },

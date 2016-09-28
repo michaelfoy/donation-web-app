@@ -28,15 +28,15 @@ exports.authenticate = {
 
   handler: function (request, reply) {
     const data = request.payload;
-    let isUser = 0;
-    this.users.forEach(function (user) {
+    for (let i = 0; i < this.users.length; i++) {
+      let user = this.users[i];
       if ((data.email == user.email) && (data.password == user.password)) {
-        isUser = 1;
+        this.currentUser = user;
         reply.redirect('/home');
       }
-    });
+    };
 
-    if (isUser == 0) {
+    if (this.currentUser == {}) {
       reply.redirect('/signup');
     };
   },
