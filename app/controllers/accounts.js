@@ -1,7 +1,7 @@
 'use strict';
 
 exports.main = {
-
+  auth: false,
   handler: function (request, reply) {
     reply.view('main', { title: 'Welcome to Donations' });
   },
@@ -9,7 +9,7 @@ exports.main = {
 };
 
 exports.signup = {
-
+  auth: false,
   handler: function (request, reply) {
     reply.view('signup', { title: 'Sign up for Donations' });
   },
@@ -17,7 +17,7 @@ exports.signup = {
 };
 
 exports.login = {
-
+  auth: false,
   handler: function (request, reply) {
     reply.view('login', { title: 'Login to Donations' });
   },
@@ -25,36 +25,36 @@ exports.login = {
 };
 
 exports.authenticate = {
-
+  auth: false,
   handler: function (request, reply) {
-    const data = request.payload;
-    for (let i = 0; i < this.users.length; i++) {
-      let user = this.users[i];
-      if ((data.email == user.email) && (data.password == user.password)) {
-        this.currentUser = user;
-        reply.redirect('/home');
-      }
-    };
-
-    if (this.currentUser == {}) {
+    const user = request.payload;
+    if ((user.email in this.users) && (user.password === this.users[user.email].password)) {
+      request.cookieAuth.set({
+        loggedIn: true,
+        loggedInUser: user.email,
+      });
+      reply.redirect('/home');
+    } else {
       reply.redirect('/signup');
-    };
+    }
   },
 };
 
 exports.logout = {
-
+  auth: false,
   handler: function (request, reply) {
+    request.cookieAuth.clear();
     reply.redirect('/');
   },
 
 };
 
 exports.register = {
-
+  auth: false,
   handler: function (request, reply) {
-    const data = request.payload;
-    this.users.push(data);
+    const user = request.payload;
+    this.users[user.email] = user;
+    console.log(this.users[0]);
     reply.redirect('/login');
   },
 };
