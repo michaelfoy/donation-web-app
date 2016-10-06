@@ -54,7 +54,23 @@ exports.register = {
   handler: function (request, reply) {
     const user = request.payload;
     this.users[user.email] = user;
-    console.log(this.users[0]);
     reply.redirect('/login');
+  },
+};
+
+exports.viewSettings = {
+  auth: false,
+  handler: function (request, reply) {
+    reply.view('settings', { title: 'Adjust account info' });
+  },
+
+};
+
+exports.updateSettings = {
+  auth: false,
+  handler: function (request, reply) {
+    const user = request.payload;
+    this.users[user.email] = user;
+    reply.redirect('/settings');
   },
 };
