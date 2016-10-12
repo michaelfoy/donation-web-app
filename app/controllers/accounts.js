@@ -69,18 +69,29 @@ exports.register = {
 };
 
 exports.viewSettings = {
-  auth: false,
   handler: function (request, reply) {
-    reply.view('settings', { title: 'Adjust account info' });
+    const userEmail = request.auth.credentials.loggedInUser;
+    User.findOne({ email: userEmail }).then(foundUser => {
+      reply.view('settings', { title: 'Edit Account Settings', user: foundUser });
+    }).catch(err => {
+      reply.redirect('/');
+    });
   },
 
 };
 
 exports.updateSettings = {
-  auth: false,
   handler: function (request, reply) {
-    const user = request.payload;
-    this.users[user.email] = user;
-    reply.redirect('/settings');
+    const loggedInUserEmail = request.auth.credentials.loggedInUser;
+    const editedUser = request.payload;
+    User.findOne({ email: loggedInUserEmail }).then(user => {
+      if (!(editedUser.firstName === "")) { user.firstName = editedUser.firstName; }
+      if (!(editedUser.lastName === "")) { user.lastName = editedUser.lastName; }
+      if (!(editedUser.email === "")) { user.email = editedUser.email; }
+      if (!(editedUser.password === "")) { user.password = editedUser.password; }
+      return user.save();
+    }).then(user => {
+      reply.redirect('/home');
+    });
   },
 };
