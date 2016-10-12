@@ -1,4 +1,5 @@
 'use strict';
+const User = require('../models/user');
 
 exports.main = {
   auth: false,
@@ -28,16 +29,21 @@ exports.authenticate = {
   auth: false,
   handler: function (request, reply) {
     const user = request.payload;
-    if ((user.email in this.users) && (user.password === this.users[user.email].password)) {
-      request.cookieAuth.set({
-        loggedIn: true,
-        loggedInUser: user.email,
-      });
-      reply.redirect('/home');
-    } else {
-      reply.redirect('/signup');
-    }
+    User.findOne({ email: user.email }).then(foundUser => {
+      if (foundUser && foundUser.password === user.password) {
+        request.cookieAuth.set({
+          loggedIn: true,
+          loggedInUser: user.email,
+        });
+        reply.redirect('/home');
+      } else {
+        reply.redirect('/signup');
+      }
+    }).catch(err => {
+      reply.redirect('/');
+    });
   },
+
 };
 
 exports.logout = {
@@ -52,9 +58,13 @@ exports.logout = {
 exports.register = {
   auth: false,
   handler: function (request, reply) {
-    const user = request.payload;
-    this.users[user.email] = user;
-    reply.redirect('/login');
+    const user = new User(request.payload);
+
+    user.save().then(newUser => {
+      reply.redirect('/login');
+    }).catch(err => {
+      reply.redirect('/');
+    });
   },
 };
 
