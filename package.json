@@ -4,6 +4,7 @@
   "description": "An application to provide donation facilities for a candidate",
   "main": "index.js",
   "scripts": {
+    "start": "node index",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "michaelfoy",
